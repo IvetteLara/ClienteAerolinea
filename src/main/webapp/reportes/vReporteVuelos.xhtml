@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Reporte de vuelos</title>
+    </h:head>
+    <h:body>
+
+
+    <h:form id="main">
+        <p:outputLabel value="Desde"/>
+        <p:calendar  id="txtFecha1" pattern="dd-MM-yyyy" 
+                     value="#{controlReporteVuelos.fecha1}"/>
+        <p:outputLabel value="Hasta"/>
+        <p:calendar  id="txtFecha2" pattern="dd-MM-yyyy" 
+                     value="#{controlReporteVuelos.fecha2}"/>
+        <p:commandButton ajax="false" value="Generar Reporte" 
+                         action="#{controlReporteVuelos.generarReporte()}" 
+                         onclick="target = '_blank'"/>
+    </h:form>
+    </h:body>
+</html>
+
