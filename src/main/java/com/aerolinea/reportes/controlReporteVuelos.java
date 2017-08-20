@@ -56,6 +56,8 @@ public class controlReporteVuelos implements Serializable{
         String f2 = new SimpleDateFormat("dd-MM-yyyy").format(fecha2);
         JRBeanCollectionDataSource coll = new JRBeanCollectionDataSource(consultar(f1, f2));
         parametros.put(JRParameter.REPORT_LOCALE, new Locale("es", "ES"));
+        parametros.put("fecha1", f1);
+        parametros.put("fecha2", f2);
         jasperPrint = JasperFillManager.fillReport(reportePath, parametros, coll);
         httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         httpServletResponse.setContentType("application/pdf");
