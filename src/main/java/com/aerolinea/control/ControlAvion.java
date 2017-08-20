@@ -17,10 +17,11 @@ public class ControlAvion implements Serializable {
     
     private List<Avion> aviones;
     private Avion avion;
+    private String accion = null;
     
     @PostConstruct
     public void init(){
-        avion=new Avion();
+        avion = new Avion();
         aviones = new ArrayList<>();
     }
     
@@ -28,8 +29,7 @@ public class ControlAvion implements Serializable {
     }
 
     public List<Avion> getAviones() {
-        List<com.aerolinea.cliente.Avion> lista = 
-                consultarAviones();
+        List<com.aerolinea.cliente.Avion> lista = consultarAviones();
         aviones.clear();
         for(com.aerolinea.cliente.Avion a: lista){
             aviones.add(new Avion(a.getIdavion(), 
@@ -52,19 +52,39 @@ public class ControlAvion implements Serializable {
     } 
     
     public String preparaNuevo(){
-        avion=new Avion();
+        avion = new Avion();
+        accion = "add";
         return "AvionForm.xhtml?faces-redirect=true";
     }
     
     public String guardar(){
-        if (avion.getIdavion()==null){
-            com.aerolinea.cliente.Avion a = 
-                    new com.aerolinea.cliente.Avion();
-            a.setCapacidad(avion.getCapacidad());
-            a.setDescripcion(avion.getDescripcion());
+        com.aerolinea.cliente.Avion a = settingAvion(avion);
+        
+        switch(accion) {
+            case "add":
             create(a);
+            break;
+
+            case "edit":
+            edit(a);
+            break;
+
+            case "del":
+            remove(avion);
+            break;            
         }
+        
+        accion = null;
         return "AvionLista.xhtml?faces-redirect=true";
+    }
+    
+    private com.aerolinea.cliente.Avion settingAvion(com.aerolinea.entidad.Avion avion) {
+        com.aerolinea.cliente.Avion a = new com.aerolinea.cliente.Avion();
+        a.setIdavion(avion.getIdavion());
+        a.setCapacidad(avion.getCapacidad());
+        a.setDescripcion(avion.getDescripcion());
+
+        return a;
     }
     
     private void create(com.aerolinea.cliente.Avion a){
@@ -75,6 +95,31 @@ public class ControlAvion implements Serializable {
         } catch (Exception ex) {
         }
     }
+   
+    public String preparaEditar(com.aerolinea.entidad.Avion a){
+        avion = a;
+        accion = "edit";
+        return "AvionForm.xhtml?faces-redirect=true";
+    }
+    
+    private void edit(com.aerolinea.cliente.Avion a){
+        
+        try {
+            com.aerolinea.cliente.WsAvion port = service.getWsAvionPort();
+            port.edit(a);
+        } catch (Exception ex) {
+        }
+    } 
+     
+    public void remove(com.aerolinea.entidad.Avion avion){
+        com.aerolinea.cliente.Avion a = settingAvion(avion);
+        
+        try {
+            com.aerolinea.cliente.WsAvion port = service.getWsAvionPort();
+            port.remove(a);
+        } catch (Exception ex) {
+        }
+    }    
     
     private List<com.aerolinea.cliente.Avion> consultarAviones(){
         
@@ -85,6 +130,6 @@ public class ControlAvion implements Serializable {
         } catch (Exception ex) {
             return null;
         }
-    }
+    }    
 }
 

@@ -41,10 +41,10 @@
                                 <h:outputText value="#{item.descripcion}"/>
                             </p:column>
                             <p:column>
-                            <p:commandButton icon="ui-icon-pencil"/>
+                            <p:commandButton icon="ui-icon-pencil" action="#{controlAvion.preparaEditar(item)}"/>
                             </p:column>
                             <p:column>
-                            <p:commandButton icon="ui-icon-trash"
+                            <p:commandButton icon="ui-icon-trash" action="#{controlAvion.remove(item)}"
                               onclick="return confirm('estas seguro?')" update=":frmMain:tblAviones"/>
                             </p:column>
                         </p:dataTable>
